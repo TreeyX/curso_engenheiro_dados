@@ -1,0 +1,8 @@
+# NOTEBOOKS (ignorar tudo)
+*.ipynb
+.ipynb_checkpoints/
+
+##Configuraçoes sensiveis(Não versionar)
+config.yaml
+Pipfile.lock
+.env
