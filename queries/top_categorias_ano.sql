@@ -30,10 +30,11 @@ group by order_year, category_name
 cte_top_categorias as 
 (
 select *, 
-	row_number() over (partition by order_year  order by sales_amt desc) as rank_venda 
+	row_number() over (partition by order_year order by order_year, sales_amt desc) as rank_sale 
 from cte_vendas_ano
-order by rank_venda 
+order by rank_sale 
 )
 select * 
 	from cte_top_categorias 
-where rank_venda between 1 and 5;
+where rank_sale <= 5
+order by order_year, rank_sale ;
