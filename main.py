@@ -50,16 +50,19 @@ for arquivos in lista_arquivos_raw:
             print(f"Tabela {nome_tabela} já existe!")
 
 # %%
-lista_tarefas = ['vendas_desconto', 'performance_vendedores', 'top_produtos_caros', 'vendas_ultimos_anos']
+lista_tarefas = ['vendas_desconto', 'performance_vendedores', 'top_produtos_caros', 'vendas_ultimos_anos', 'top_categorias_ano']
 for tarefas in lista_tarefas:
 
-    with open(f'./queries/{tarefas}.sql', 'r', encoding='utf8') as arquivo_sql:
-        query = arquivo_sql.read()
-        df = pd.read_sql(query, engine)
+    if Path(f'./queries/{tarefas}.sql').exists():
+        with open(f'./queries/{tarefas}.sql', 'r', encoding='utf8') as arquivo_sql:
+            query = arquivo_sql.read()
+            df = pd.read_sql(query, engine)
 
-    arquivo_parquet = Path(caminho_final) / f"{tarefas}.parquet"
-    df.to_parquet(arquivo_parquet, engine='fastparquet', compression='snappy')
+        arquivo_parquet = Path(caminho_final) / f"{tarefas}.parquet"
+        df.to_parquet(arquivo_parquet, engine='fastparquet', compression='snappy')
 
-    print(f'gerado {tarefas}.parquet') 
+        print(f'gerado {tarefas}.parquet')
+    else:
+        print(f'arquivo {tarefas}.sql inexistente!') 
 
 

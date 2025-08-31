@@ -10,7 +10,8 @@ select
 	fornecedores.company_name,
 	vendas.order_date,
 	produtos.unit_price,
-	detalhes_vendas.unit_price sale_amt,
+	detalhes_vendas.unit_price unit_amt,
+	(detalhes_vendas.unit_price * detalhes_vendas.quantity) sale_amt,
 	detalhes_vendas.quantity
 	from products produtos
 inner join order_details detalhes_vendas on produtos.product_id = detalhes_vendas.product_id
