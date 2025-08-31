@@ -18,6 +18,7 @@ A ideia surgiu durante a resolução dos exercícios de SQL da Atividade 17, ond
 - SQLAlchemy
 - PostgreSQL
 - Pipenv
+- Pyyaml
 
 ## 🔨 Instalação e Configuração
 Pré-requisitos
