@@ -11,7 +11,7 @@ with open('./config.yaml', 'r', encoding='utf-8') as arquivo_configuracao:
     config = yaml.safe_load(arquivo_configuracao)
 
 postgres_config = config['credenciais_postgres']
-caminho_final = config['caminho_etl_final']
+caminho_final = fr".\data\etl_data"
 
 # %%
 connection_string = f"postgresql+psycopg2://{postgres_config['user']}:{postgres_config['password']}@{postgres_config['host']}:{postgres_config['port']}/{postgres_config['database']}"
@@ -45,7 +45,7 @@ for arquivos in lista_arquivos_raw:
         if not tabela_existe:
             df = pd.read_csv(arquivo_csv, sep=';', encoding='utf-8')
             df.to_sql(nome_tabela, conn, if_exists='append', index=False)
-            print(f"Tabela {nome_tabela} não existe, criando!", end='\r')
+            print(f"Tabela {nome_tabela} não existe, criando!")
         else:
             print(f"Tabela {nome_tabela} já existe!")
 
@@ -55,6 +55,8 @@ with open('./queries/atividade_1.sql', 'r', encoding='utf8') as disconto:
 
 # %%
 df_vendas_desconto = pd.read_sql(query, engine)
-df_vendas_desconto.to_parquet(fr'.{caminho_final}\vendas_desconto.parquet', engine='fastparquet', compression='snappy')
+
+arquivo_parquet = Path(caminho_final) / "vendas_desconto.parquet"
+df_vendas_desconto.to_parquet(arquivo_parquet, engine='fastparquet', compression='snappy')
 
 
