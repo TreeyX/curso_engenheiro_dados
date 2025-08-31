@@ -32,5 +32,3 @@ Pré-requisitos
 ## 🚀 Como executar
 
 - Para executar, basta rodar o arquivo run_pipeline.bat que irá verificar se já existem as tabelas, caso não exista será adicionada e atualizadas com os arquivos csv
-        
-

@@ -21,27 +21,26 @@ insp = inspect(engine)
 with open('./ddl/create_table.sql', 'r', encoding='utf8') as criar_tabela:
     query = criar_tabela.read()
 
-with engine.connect() as conn:
+with engine.begin() as conn:
     conn.execute(text(query))
-    conn.commit
 
 # %%
 caminho_arquivos_raw = Path(fr".\data\raw_data")
 lista_arquivos_raw = list(caminho_arquivos_raw.glob("*.csv"))
 
+
+# %%
 for arquivos in lista_arquivos_raw:
     arquivo = os.path.basename(arquivos)
     nome_tabela = arquivo.split(".csv")[0]
-    if not insp.has_table(nome_tabela, schema='public'):
+    with engine.begin() as conn:
+        resultado = conn.execute(text(f"select 1 from {nome_tabela} od limit 1")).fetchone()
 
-        with raw_engine.cursor() as cur:
-            with open(fr'.\data\raw_data\{arquivo}', 'r', encoding='utf-8') as raw_file:
-                cur.copy_expert(f"COPY {nome_tabela} FROM STDIN WITH DELIMITER ';' CSV HEADER", raw_file)
-        raw_engine.commit()
-    else:
-        print('Sem tabelas novas!', end='\r')
-
-raw_engine.close()
+        if resultado is None:
+            df = pd.read_csv(fr".\data\raw_data\{nome_tabela}.csv", sep=';', encoding='utf-8')
+            df.to_sql(nome_tabela, conn, if_exists='append', index=False)
+        else:
+            print('Sem tabelas novas!', end='\r')
 
 # %%
 with open('./queries/atividade_1.sql', 'r', encoding='utf8') as disconto:
