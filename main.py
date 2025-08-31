@@ -50,13 +50,16 @@ for arquivos in lista_arquivos_raw:
             print(f"Tabela {nome_tabela} já existe!")
 
 # %%
-with open('./queries/atividade_1.sql', 'r', encoding='utf8') as disconto:
-    query = disconto.read()
+lista_tarefas = ['vendas_desconto', 'performance_vendedores']
+for tarefas in lista_tarefas:
 
-# %%
-df_vendas_desconto = pd.read_sql(query, engine)
+    with open(f'./queries/{tarefas}.sql', 'r', encoding='utf8') as arquivo_sql:
+        query = arquivo_sql.read()
+        df = pd.read_sql(query, engine)
 
-arquivo_parquet = Path(caminho_final) / "vendas_desconto.parquet"
-df_vendas_desconto.to_parquet(arquivo_parquet, engine='fastparquet', compression='snappy')
+    arquivo_parquet = Path(caminho_final) / f"{tarefas}.parquet"
+    df.to_parquet(arquivo_parquet, engine='fastparquet', compression='snappy')
+
+    print(f'gerado {tarefas}.parquet') 
 
 
