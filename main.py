@@ -50,7 +50,7 @@ for arquivos in lista_arquivos_raw:
             print(f"Tabela {nome_tabela} já existe!")
 
 # %%
-lista_tarefas = ['vendas_desconto', 'performance_vendedores', 'top_produtos_caros']
+lista_tarefas = ['vendas_desconto', 'performance_vendedores', 'top_produtos_caros', 'vendas_ultimos_anos']
 for tarefas in lista_tarefas:
 
     with open(f'./queries/{tarefas}.sql', 'r', encoding='utf8') as arquivo_sql:
