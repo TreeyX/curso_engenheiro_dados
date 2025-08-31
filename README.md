@@ -19,11 +19,13 @@ A ideia surgiu durante a resolução dos exercícios de SQL da Atividade 17, ond
 - PostgreSQL
 - Pipenv
 
-## 🚀 Instalação e Configuração
+## 🔨 Instalação e Configuração
 Pré-requisitos
 
     Python 3.12+
 
     Pipenv instalado (pip install pipenv)
 
-    PostgreSQL (opcional, se usar banco de dados)
+    PostgreSQL (Necessário instalar e configurar: host, database, user, port, password)
+        
+
