@@ -24,7 +24,7 @@ select
 	company_name,
 	sum(sale_amt) as last_yr_amt
 from cte_atividades_vendas 
-where date_part('year', order_date) = ( select date_part('year', max(order_date)) from orders ) - 1
+where date_part('year', order_date) = ( select date_part('year', max(order_date)) from orders ) - 2
 group by company_name
 ),
 cte_vendas_curr_year as
@@ -33,7 +33,7 @@ select
 	company_name,
 	sum(sale_amt) as curr_yr_amt
 from cte_atividades_vendas 
-where date_part('year', order_date) = ( select date_part('year', max(order_date)) from orders )
+where date_part('year', order_date) = ( select date_part('year', max(order_date)) from orders ) - 1
 group by company_name
 ) 
  select 
