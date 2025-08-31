@@ -1,10 +1,10 @@
 
-CREATE TABLE categories (
+CREATE TABLE IF NOT EXISTS categories (
     category_id smallint NOT NULL,
     category_name varchar(15) NOT NULL,
     description VARCHAR
 );
-CREATE TABLE customers (
+CREATE TABLE IF NOT EXISTS customers (
     customer_id varchar(40) NOT NULL,
     company_name varchar(50) NOT NULL,
     contact_name varchar(100),
@@ -16,7 +16,7 @@ CREATE TABLE customers (
     country varchar(15),
     phone varchar(24)
 );
-CREATE TABLE employees (
+CREATE TABLE IF NOT EXISTS employees (
     employee_id smallint NOT NULL,
     last_name varchar(20) NOT NULL,
     first_name varchar(10) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE employees (
     photo_path varchar(255),
 	salary real
 );
-CREATE TABLE order_details (
+CREATE TABLE IF NOT EXISTS order_details (
     order_id smallint NOT NULL,
     product_id smallint NOT NULL,
     unit_price real NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE order_details (
     discount real NOT NULL
 );
 
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS orders (
     order_id smallint NOT NULL,
     customer_id bpchar,
     employee_id smallint,
@@ -60,7 +60,7 @@ CREATE TABLE orders (
     ship_postal_code varchar(10),
     ship_country varchar(15)
 );
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
     product_id smallint NOT NULL,
     product_name varchar(40) NOT NULL,
     supplier_id smallint,
@@ -73,12 +73,12 @@ CREATE TABLE products (
     discontinued integer NOT NULL
 );
 
-CREATE TABLE shippers (
+CREATE TABLE IF NOT EXISTS shippers (
     shipper_id smallint NOT NULL,
     company_name varchar(40) NOT NULL,
     phone varchar(24)
 );
-CREATE TABLE suppliers (
+CREATE TABLE IF NOT EXISTS suppliers (
     supplier_id smallint NOT NULL,
     company_name varchar(40) NOT NULL,
     contact_name varchar(30),

@@ -18,3 +18,12 @@ A ideia surgiu durante a resolução dos exercícios de SQL da Atividade 17, ond
 - SQLAlchemy
 - PostgreSQL
 - Pipenv
+
+## 🚀 Instalação e Configuração
+Pré-requisitos
+
+    Python 3.12+
+
+    Pipenv instalado (pip install pipenv)
+
+    PostgreSQL (opcional, se usar banco de dados)
