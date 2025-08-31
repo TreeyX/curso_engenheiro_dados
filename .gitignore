@@ -4,5 +4,9 @@
 
 ##Configuraçoes sensiveis(Não versionar)
 config.yaml
+
+# Ambientes virtuais
 Pipfile.lock
-.env
+.env/
+.venv/
+venv/
