@@ -50,7 +50,7 @@ for arquivos in lista_arquivos_raw:
             print(f"Tabela {nome_tabela} já existe!")
 
 # %%
-lista_tarefas = ['vendas_desconto', 'performance_vendedores', 'top_produtos_caros', 'vendas_ultimos_anos', 'top_categorias_ano']
+lista_tarefas = ['vendas_desconto', 'performance_vendedores', 'top_produtos_caros', 'vendas_ultimos_anos', 'top_categorias_ano', 'analitico']
 for tarefas in lista_tarefas:
 
     if Path(f'./queries/{tarefas}.sql').exists():
@@ -58,11 +58,17 @@ for tarefas in lista_tarefas:
             query = arquivo_sql.read()
             df = pd.read_sql(query, engine)
 
-        arquivo_parquet = Path(caminho_final) / f"{tarefas}.parquet"
-        df.to_parquet(arquivo_parquet, engine='fastparquet', compression='snappy')
+            arquivo_parquet = Path(caminho_final) / f"{tarefas}.parquet"
 
-        print(f'gerado {tarefas}.parquet')
+            if tarefas == 'analitico':
+                df['order_date'] = pd.to_datetime(df['order_date'])
+                df['employee_birth_date'] = pd.to_datetime(df['employee_birth_date'])
+                df['employee_hire_date'] = pd.to_datetime(df['employee_hire_date'])
+
+            df.to_parquet(arquivo_parquet, engine='fastparquet', compression='snappy')
+
+            print(f'gerado {tarefas}.parquet')
     else:
-        print(f'arquivo {tarefas}.sql inexistente!') 
+            print(f'arquivo {tarefas}.sql inexistente!') 
 
 

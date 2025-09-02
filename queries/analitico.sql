@@ -1,0 +1,58 @@
+select
+	vendas_detalhes.order_id,
+	vendas_detalhes.product_id,
+	produtos.product_name,
+	vendas.order_date,
+	categorias.category_name,
+	categorias.description,
+	produtos.unit_price, 
+	produtos.units_in_stock,
+	vendas_detalhes.unit_price sale_unit_amt,
+	vendas_detalhes.quantity sale_quantity,
+	vendas_detalhes.unit_price * vendas_detalhes.quantity sale_amt,
+	clientes.company_name clients_company_name,
+	clientes.contact_name clients_contact_name,
+	clientes.contact_title clients_contact_title,
+	clientes.city clients_city,
+	clientes.region clients_region,
+	clientes.postal_code clients_postal_code,
+	clientes.country clients_country,
+	clientes.phone clients_phone,
+	clientes.address clients_address,
+	fornecedores.company_name suppliers_company_name,
+	fornecedores.contact_name suppliers_contact_name,
+	fornecedores.contact_title suppliers_contact_title,
+	fornecedores.address suppliers_address,
+	fornecedores.city suppliers_city,
+	fornecedores.region suppliers_region,
+	fornecedores.postal_code suppliers_postal_code,
+	fornecedores.country suppliers_country,
+	fornecedores.phone suppliers_phone,
+	fornecedores.fax suppliers_fax,
+	fornecedores.homepage suppliers_homepage,
+	expedidores.phone shipper_phone,
+	expedidores.company_name,
+	empregados.first_name employee_first_name,
+	empregados.last_name employee_last_name,
+	empregados.title employee_title,
+	empregados.title_of_courtesy,
+	empregados.birth_date employee_birth_date,
+	empregados.hire_date employee_hire_date,
+	empregados.address employee_address,
+	empregados.city employee_city,
+	empregados.region employee_region,
+	empregados.postal_code employee_postal_code,
+	empregados.country employee_country,
+	empregados.home_phone employee_home_phone,
+	empregados."extension" employee_extsion,
+	empregados.photo_path employee_photo_path,
+	empregados.notes employee_notes,
+	empregados.reports_to employee_reports_to
+from order_details vendas_detalhes
+left join orders vendas on vendas_detalhes.order_id  = vendas.order_id
+left join products produtos on vendas_detalhes.product_id = produtos.product_id 
+left join suppliers fornecedores on produtos.supplier_id = fornecedores.supplier_id
+left join shippers expedidores on vendas.ship_via = expedidores.shipper_id 
+left join categories categorias on produtos.category_id = categorias.category_id 
+left join customers clientes on vendas.customer_id  = clientes.customer_id
+left join employees empregados on vendas.employee_id = empregados.employee_id;
