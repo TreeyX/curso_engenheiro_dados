@@ -1,3 +1,5 @@
+with cte_analitico as
+(
 select
 	vendas_detalhes.order_id,
 	vendas_detalhes.product_id,
@@ -56,4 +58,8 @@ left join shippers expedidores on vendas.ship_via = expedidores.shipper_id
 left join categories categorias on produtos.category_id = categorias.category_id 
 left join customers clientes on vendas.customer_id  = clientes.customer_id
 left join employees empregados on vendas.employee_id = empregados.employee_id
-where to_char(vendas.order_date, 'YYYY-MM') = '{{periodo}}';
+)
+select 
+	distinct(to_char(order_date, 'YYYY-MM')) "period" 
+from cte_analitico 
+order by "period"  ;

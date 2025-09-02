@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import ProgrammingError
+from jinja2 import Template
 
 # %%
 with open('./config.yaml', 'r', encoding='utf-8') as arquivo_configuracao:
@@ -50,7 +51,7 @@ for arquivos in lista_arquivos_raw:
             print(f"Tabela {nome_tabela} já existe!")
 
 # %%
-lista_tarefas = ['vendas_desconto', 'performance_vendedores', 'top_produtos_caros', 'vendas_ultimos_anos', 'top_categorias_ano', 'analitico']
+lista_tarefas = ['vendas_desconto', 'performance_vendedores', 'top_produtos_caros', 'vendas_ultimos_anos', 'top_categorias_ano']
 for tarefas in lista_tarefas:
 
     if Path(f'./queries/{tarefas}.sql').exists():
@@ -60,15 +61,43 @@ for tarefas in lista_tarefas:
 
             arquivo_parquet = Path(caminho_final) / f"{tarefas}.parquet"
 
-            if tarefas == 'analitico':
-                df['order_date'] = pd.to_datetime(df['order_date'])
-                df['employee_birth_date'] = pd.to_datetime(df['employee_birth_date'])
-                df['employee_hire_date'] = pd.to_datetime(df['employee_hire_date'])
-
             df.to_parquet(arquivo_parquet, engine='fastparquet', compression='snappy')
 
-            print(f'gerado {tarefas}.parquet')
+        print(f'gerado {tarefas}.parquet')
     else:
-            print(f'arquivo {tarefas}.sql inexistente!') 
+        print(f'arquivo {tarefas}.sql inexistente!') 
+
+# %%
+def transformarColunas(df):
+    
+    colunas_data = [col for col in df.columns if 'date' in col.lower()]
+    df[colunas_data] = df[colunas_data].apply(lambda x: pd.to_datetime(x, errors='coerce').dt.normalize())
+
+    return df
+    
+
+# %%
+with(
+        open('./queries/periodo_vendas.sql', 'r', encoding='utf-8') as periodo_vendas,
+        open('./queries/analitico.sql', 'r', encoding='utf-8') as analitico_sql
+    ):
+
+    query_periodo = periodo_vendas.read()
+    query_analitico = analitico_sql.read()
+    template = Template(query_analitico)
+
+    periodo_vendas = pd.read_sql(query_periodo, engine)['period'].tolist()
+
+    for periodo in periodo_vendas:
+        query = template.render(periodo=periodo)
+
+        arquivo_parquet = Path(caminho_final) /  f"analitico/analitico_{periodo}.parquet"
+        df = pd.read_sql(query, engine)
+
+        df = transformarColunas(df)
+
+        df.to_parquet(arquivo_parquet, engine='fastparquet', compression='snappy')
+
+        print(f'gerado analitico {periodo}')
 
 

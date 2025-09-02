@@ -10,6 +10,7 @@ pyyaml = "*"
 psycopg2 = "*"
 fastparquet = "*"
 ipykernel = "*"
+jinja2 = "*"
 
 [dev-packages]
 
